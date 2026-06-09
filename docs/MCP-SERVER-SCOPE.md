@@ -3,6 +3,8 @@
 **Status:** scope / design doc. Not built yet.
 **Why:** the free tier ships the *knowledge* (the six skills as markdown). The paid tier ships the *capability* — the same skills as **live tools** your model runs, via one remote MCP connector URL. Charge for capability/access, not static content. That is the agentic-commerce thesis, dog-fooded.
 
+**Where it leads — the real value is [Vellocity](https://vell.ai).** This MCP is a *teaser of the engine*: the same tools, but thin and scoped. The full motion — listing optimization, co-sell, pricing, demand-gen run continuously against live Marketplace data with an agent layer — is the Vellocity app. Architecturally the cleanest build is to make this MCP a thin public surface over **Vellocity's own in-app MCP/agent layer** (see [[project_agentic_testing_harness]] — "AgentCore = in-app MCP layer"), so the teaser literally calls a scoped slice of the product. Free skills → Foundry tools → Vellocity platform.
+
 ---
 
 ## 1. What it is
