@@ -37,8 +37,8 @@ Each tool's `description` + JSON schema mirrors the matching `SKILL.md` so behav
 
 ## 5. Metering / payment (Ron's rails)
 
-- **v1:** flat Foundry membership unlocks the key (simplest; no per-call accounting).
-- **v2:** meter per tool call — Stripe metered billing, or **AgentCore Pay / x402** for true pay-per-call when the *caller is itself an agent*. This is the headline dog-food: an agent discovers the tool, pays per call, and transacts without a human. Ties to [[project_billing_rails_2026_05]] + the x402/AgentCore intel in [[reference_agentic_market_x402_buyer]].
+- **v1:** flat Foundry/Vellocity membership unlocks the key (simplest; no per-call accounting).
+- **v2 — two rails:** (a) **fiat** Stripe metered / Marketplace contract for human/account buyers; (b) **x402** for agent buyers — *we are the seller*: our metered tools return HTTP 402 + verify a stablecoin (USDC/Base) payment proof. This is the open Coinbase x402 standard (live today on x402scan/agentic.market — no preview dependency). **AgentCore Payments is the buyer side** (PREVIEW, announced 2026-05-07, Coinbase+Stripe): it lets an agent auto-negotiate x402, authenticate a wallet, settle, and get proof, with session spend-limits. List our MCP in the **Coinbase x402 Bazaar** (10,000+ endpoints, via AgentCore Gateway) so agents discover + pay for it — the literal "get bought by an agent" dog-food. Ties to [[project_billing_rails_2026_05]] + [[reference_agentic_market_x402_buyer]].
 
 ## 6. Hosting
 
