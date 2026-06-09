@@ -1,6 +1,7 @@
 # GTM Skill Pack — MCP Server Scope (Foundry "tools" tier)
 
-**Status:** scope / design doc. Not built yet.
+**Status:** the free sample tier is **built** → [github.com/vell-io/vellocity-mcp](https://github.com/vell-io/vellocity-mcp). This doc scopes the full tiered plan.
+**It's not a standalone tool — it's the free `gtm_*` sample tier of the one [Vellocity MCP](https://github.com/vell-io/vellocity-mcp)** (gateway: **`mcp.vell.ai`**), with authenticated (live-data) and metered tiers gated above it. See that repo's `docs/ARCHITECTURE.md` for tiers, repo strategy, and the security model.
 **Why:** the free tier ships the *knowledge* (the six skills as markdown). The paid tier ships the *capability* — the same skills as **live tools** your model runs, via one remote MCP connector URL. Charge for capability/access, not static content. That is the agentic-commerce thesis, dog-fooded.
 
 **Where it leads — the real value is [Vellocity](https://vell.ai).** This MCP is a *teaser of the engine*: the same tools, but thin and scoped. The full motion — listing optimization, co-sell, pricing, demand-gen run continuously against live Marketplace data with an agent layer — is the Vellocity app. Architecturally the cleanest build is to make this MCP a thin public surface over **Vellocity's own in-app MCP/agent layer** (see [[project_agentic_testing_harness]] — "AgentCore = in-app MCP layer"), so the teaser literally calls a scoped slice of the product. Free skills → Foundry tools → Vellocity platform.
@@ -41,16 +42,16 @@ Each tool's `description` + JSON schema mirrors the matching `SKILL.md` so behav
 
 ## 6. Hosting
 
-- Reuse the existing MCP gateway stack. Candidate URL: `gtm-mcp.vell.ai` or `mcp.itsrondavis.com` (cert via DNS-01/Route53 — the working pattern, avoids the :80 LE lock-out, per the mcp.vell.ai renewal fix).
+- **`mcp.vell.ai` is the canonical public Vellocity MCP gateway** (not a per-tool subdomain). Move the existing internal MCPs (QBO, Kajabi) to `internal-mcp.vell.ai` so the public product surface is clean. Cert via DNS-01/Route53 (the working pattern; avoids the :80 LE lock-out per the mcp.vell.ai renewal fix).
 - Streamable HTTP (remote MCP) so Claude/ChatGPT connectors accept it directly; `mcp-remote` stdio bridge only if a client needs it.
-- Catalog it where agents look (MCP Market / directories) — practicing "get found" for the tool itself.
+- **List the Tier-0 sample in AWS Marketplace AI Agents & Tools** + MCP directories — practicing "get found" for the tool itself, and a partner-facing reference example.
 
 ## 7. Build plan
 
-1. **Scaffold** the MCP server (TypeScript SDK), 3 tools, thin mode, JSON schemas from the SKILL.md files.
+1. ~~**Scaffold** the MCP server (TypeScript SDK), 3 tools, thin mode.~~ **DONE** → [vell-io/vellocity-mcp](https://github.com/vell-io/vellocity-mcp) (`gtm_*` sample tier, bearer auth, Streamable HTTP, builds + smoke green).
 2. **Wire thick mode** to Bedrock (Claude) behind a flag; structured outputs per tool.
-3. **Auth**: bearer key + Foundry-purchase issuance; rate-limited free preview.
-4. **Host** at the chosen subdomain (DNS-01 cert); smoke-test from a real connector in Claude + ChatGPT.
+3. **Auth**: per-tenant key + Foundry/Vellocity-purchase issuance; rate-limited free preview.
+4. **Host** at `mcp.vell.ai` (DNS-01 cert); smoke-test from a real connector in Claude + ChatGPT.
 5. **Meter** (v2): Stripe metered → then x402 / AgentCore Pay for agent-paid calls.
 6. **Wire into the funnel**: add the connector URL to the on-site builder's Claude/ChatGPT output and to the Foundry unlock; the README's tier-3 row goes live.
 
