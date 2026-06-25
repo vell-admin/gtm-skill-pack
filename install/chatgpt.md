@@ -3,7 +3,7 @@
 ## A. As a Custom GPT (one paste)
 1. ChatGPT → **Explore GPTs** → **Create** → **Configure**.
 2. Name it "AWS Marketplace GTM."
-3. Paste the **Operating instructions** from [`pack/gtm-skill-pack.md`](../pack/gtm-skill-pack.md) into **Instructions**, then paste the six skills underneath (or attach the file under **Knowledge**).
+3. Paste the **Operating instructions** from [`pack/gtm-skill-pack.md`](../pack/gtm-skill-pack.md) into **Instructions**, then paste the eight skills underneath (or attach the file under **Knowledge**).
 4. Save, start it, and name a skill: *"Use the Pricing Story Builder."*
 
 ## B. As a Project (one paste)

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Session 1 — Diagnose: where the pipeline leaks · 1:1 GTM Coaching</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --ink:#0b0c10; --body:#3f4654; --mut:#6b7280;
+  --line:rgba(17,18,21,.10); --line2:rgba(17,18,21,.06);
+  --soft:#faf8ff; --card:#fff;
+  --accent:#330582; --accent2:#9a34cd; --pink:#f3e2fd; --blue:#3e44ff; --blue-soft:#eceaff;
+  --grad:linear-gradient(105deg,#330582 0%,#9a34cd 100%);
+  --grad-deep:linear-gradient(135deg,#1a0442 0%,#330582 48%,#6b1fa8 100%);
+}
+@page{ size:1280px 720px; margin:0; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; background:#5b5b66; color:var(--body);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; line-height:1.5;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.mono{ font-family:'JetBrains Mono',monospace; }
+.disp{ font-family:'Plus Jakarta Sans','Inter',sans-serif; }
+.grad{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+h1,h2,h3{ color:var(--ink); letter-spacing:-.02em; margin:0; font-family:'Plus Jakarta Sans','Inter',sans-serif; }
+
+/* ── SLIDE FRAME ── */
+.slide{ position:relative; width:1280px; height:720px; background:#fff; overflow:hidden;
+  page-break-after:always; padding:64px 80px 72px; }
+.slide:last-child{ page-break-after:auto; }
+
+/* eyebrow + headline */
+.eye{ font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); }
+.kicker{ display:flex; align-items:center; gap:11px; margin-bottom:10px; }
+.kicker .dot{ width:22px; height:22px; border-radius:7px; background:var(--grad); flex-shrink:0; }
+.kicker .sn{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--mut); }
+h2.slide-h{ font-size:46px; line-height:1.04; font-weight:800; letter-spacing:-.03em; max-width:980px; }
+.slide-sub{ font-size:19px; color:var(--body); margin-top:14px; max-width:880px; line-height:1.45; }
+
+/* ── COVER ── */
+.cover{ background:var(--grad-deep); color:#fff; padding:80px; display:flex; flex-direction:column; }
+.cover::before{ content:""; position:absolute; inset:0;
+  background:radial-gradient(ellipse 50% 45% at 88% 8%, rgba(255,255,255,.16), transparent 60%),
+             radial-gradient(ellipse 55% 50% at 6% 100%, rgba(154,52,205,.45), transparent 60%); }
+.cover > *{ position:relative; z-index:1; }
+.cover .brandbar{ display:flex; align-items:center; gap:12px; }
+.cover .cdot{ width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#fff,#e9d5ff); }
+.cover .bn{ font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:21px; color:#fff; letter-spacing:-.02em; }
+.cover .bt{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#d8b4fe; }
+.cover .sesstag{ margin-top:auto; font-family:'JetBrains Mono',monospace; font-size:15px; letter-spacing:.22em; text-transform:uppercase; color:#d8b4fe; }
+.cover h1{ color:#fff; font-size:78px; line-height:.99; font-weight:800; letter-spacing:-.04em; margin-top:16px; max-width:1000px; }
+.cover .csub{ font-size:21px; color:rgba(255,255,255,.85); margin-top:24px; max-width:760px; line-height:1.45; }
+.cover .by{ margin-top:40px; font-size:16px; color:rgba(255,255,255,.7); }
+.cover .by b{ color:#fff; }
+
+/* ── FOOTER ── */
+.foot{ position:absolute; left:80px; right:80px; bottom:30px; display:flex; justify-content:space-between; align-items:center;
+  font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--mut); border-top:1px solid var(--line2); padding-top:12px; }
+.foot .promise{ color:var(--accent); font-weight:500; }
+
+/* ── BULLETS ── */
+.bullets{ margin-top:30px; display:flex; flex-direction:column; gap:16px; max-width:980px; }
+.bullet{ display:flex; gap:16px; align-items:flex-start; }
+.bullet .bn{ font-family:'JetBrains Mono',monospace; font-size:14px; color:#fff; background:var(--grad); width:30px; height:30px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:500; }
+.bullet .bt{ font-size:18px; color:var(--body); line-height:1.45; padding-top:3px; }
+.bullet .bt b{ color:var(--ink); font-weight:700; }
+
+/* ── CARD GRID ── */
+.grid{ margin-top:30px; display:grid; gap:18px; }
+.g2{ grid-template-columns:1fr 1fr; } .g3{ grid-template-columns:1fr 1fr 1fr; }
+.cell{ border:1px solid var(--line); border-radius:16px; padding:22px 24px; background:var(--soft); }
+.cell .ci{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.cell h3{ font-size:21px; font-weight:700; margin:8px 0 6px; }
+.cell p{ font-size:15px; color:var(--body); margin:0; line-height:1.45; }
+
+/* ── TABLE ── */
+.tbl{ width:100%; border-collapse:collapse; margin-top:26px; }
+.tbl th{ text-align:left; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--mut); padding:0 16px 12px; border-bottom:2px solid var(--line); }
+.tbl td{ padding:16px; border-bottom:1px solid var(--line2); font-size:16px; color:var(--body); vertical-align:top; }
+.tbl .lead{ font-weight:700; color:var(--ink); white-space:nowrap; }
+.tbl .tag{ font-family:'JetBrains Mono',monospace; color:var(--accent); white-space:nowrap; }
+.tbl tr.empty td{ color:var(--mut); font-style:italic; }
+.tbl .blank{ display:inline-block; min-width:140px; border-bottom:1.5px dashed var(--line); height:18px; }
+
+/* ── MOVE / CALLOUT PANEL ── */
+.panel{ background:var(--grad-deep); border-radius:20px; padding:34px 40px; color:#fff; margin-top:30px; position:relative; overflow:hidden; }
+.panel::after{ content:""; position:absolute; inset:0; background:radial-gradient(ellipse 50% 80% at 92% 10%, rgba(154,52,205,.4), transparent 60%); }
+.panel > *{ position:relative; z-index:1; }
+.panel .lbl{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:#d8b4fe; }
+.panel h3{ color:#fff; font-size:28px; margin:12px 0 10px; letter-spacing:-.02em; line-height:1.15; }
+.panel p{ font-size:17px; color:rgba(255,255,255,.86); margin:0; line-height:1.5; max-width:900px; }
+
+/* ── STAGE STRIP ── */
+.stages{ display:flex; gap:0; margin-top:40px; }
+.stage{ flex:1; border:1px solid var(--line); border-right:0; padding:24px 22px; background:#fff; position:relative; }
+.stage:first-child{ border-radius:16px 0 0 16px; }
+.stage:last-child{ border-right:1px solid var(--line); border-radius:0 16px 16px 0; }
+.stage.on{ background:var(--grad); border-color:transparent; }
+.stage .num{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent); }
+.stage.on .num{ color:rgba(255,255,255,.85); }
+.stage h4{ font-size:18px; font-weight:700; color:var(--ink); margin:8px 0 6px; }
+.stage.on h4{ color:#fff; }
+.stage p{ font-size:13px; color:var(--mut); margin:0; line-height:1.4; }
+.stage.on p{ color:rgba(255,255,255,.85); }
+.stage .mark{ position:absolute; top:14px; right:16px; font-size:18px; }
+
+/* ── LEAK MAP ── */
+.leakmap{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:34px; }
+.leak{ border:1px solid var(--line); border-radius:16px; padding:22px 24px; background:var(--soft); position:relative; }
+.leak .n{ position:absolute; top:18px; right:22px; font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:700; color:var(--line); }
+.leak .stage-lbl{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+.leak h3{ font-size:20px; font-weight:700; margin:8px 0 6px; }
+.leak p{ font-size:14px; color:var(--body); margin:0; line-height:1.4; }
+
+/* ── BIG STAT ── */
+.statrow{ display:flex; gap:40px; margin-top:40px; }
+.stat .num{ font-family:'Plus Jakarta Sans',sans-serif; font-size:64px; font-weight:800; letter-spacing:-.04em; line-height:1; }
+.stat .lab{ font-size:16px; color:var(--body); margin-top:10px; max-width:300px; line-height:1.4; }
+
+/* homework numbered list */
+.hw{ margin-top:30px; display:flex; flex-direction:column; gap:18px; max-width:900px; }
+.hw .item{ display:flex; gap:18px; align-items:flex-start; }
+.hw .ck{ width:34px; height:34px; border-radius:9px; border:2px solid var(--accent); flex-shrink:0; }
+.hw .tx{ font-size:19px; color:var(--ink); line-height:1.4; padding-top:3px; }
+.hw .tx span{ color:var(--mut); font-size:16px; }
+</style>
+</head>
+<body>
+
+<!-- 1 · COVER -->
+<section class="slide cover">
+  <div class="brandbar"><span class="cdot"></span>
+    <span><div class="bn">Ron Davis</div><div class="bt">AWS Marketplace GTM</div></span>
+  </div>
+  <div class="sesstag">Session 1 · Diagnose</div>
+  <h1>Where your pipeline<br>actually leaks.</h1>
+  <p class="csub">Before we fix anything, we name the single biggest leak between "listed" and "bought" — and stand up a scoreboard so every week shows progress.</p>
+  <div class="by"><b>1:1 GTM Coaching</b> · Ron Davis · From listed to bought.</div>
+</section>
+
+<!-- 2 · THE MAP -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · The map</span></div>
+  <h2 class="slide-h">Marketplace GTM leaks in <span class="grad">six places.</span></h2>
+  <p class="slide-sub">Revenue drains at a specific stage of the buyer's journey. We're going to find which one is costing you the most — not fix all six at once.</p>
+  <div class="leakmap">
+    <div class="leak"><span class="n">1</span><div class="stage-lbl">Found</div><h3>Discovery</h3><p>Buyers and agents searching your problem never surface you.</p></div>
+    <div class="leak"><span class="n">2</span><div class="stage-lbl">Chosen</div><h3>Clarity &amp; proof</h3><p>They find you, can't tell what you do or why you, and bounce.</p></div>
+    <div class="leak"><span class="n">3</span><div class="stage-lbl">Priced</div><h3>Pricing story</h3><p>Price doesn't track value; procurement stalls the deal.</p></div>
+    <div class="leak"><span class="n">4</span><div class="stage-lbl">Agent-ready</div><h3>Machine-legible</h3><p>An AI agent can't parse, compare, or transact against you.</p></div>
+    <div class="leak"><span class="n">5</span><div class="stage-lbl">Demand</div><h3>Traffic</h3><p>The listing is a storefront with nothing driving people to it.</p></div>
+    <div class="leak"><span class="n">6</span><div class="stage-lbl">Co-sell</div><h3>AWS field</h3><p>The account team doesn't know when to bring you into a deal.</p></div>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>01 / 12</span></div>
+</section>
+
+<!-- 2b · THE SECOND BUYER (Leak #4, quantified) -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · The second buyer</span></div>
+  <h2 class="slide-h">Leak #4, in <span class="grad">numbers.</span></h2>
+  <p class="slide-sub">Your listing has two buyers now: the human who skims it, and the AI agent that retrieves and procures. We scored ~600 real Marketplace listings as both. The gap is the leak.</p>
+  <div class="statrow">
+    <div class="stat"><div class="num grad">76 &rarr; 23</div><div class="lab">Median listing: score to a human vs. to a buying agent</div></div>
+    <div class="stat"><div class="num grad">&minus;50</div><div class="lab">Transactability cliff (88 &rarr; 38) — the agent can't act on it</div></div>
+    <div class="stat"><div class="num grad">~600</div><div class="lab">Real AWS Marketplace listings scored, both ways</div></div>
+  </div>
+  <div class="panel">
+    <div class="lbl">// why this leak is invisible</div>
+    <h3>A listing can read an 8 to a buyer and a 3 to the agent that procures.</h3>
+    <p>You optimized for the reader who's leaving. The buyer who's arriving — the agent — reads structure, not adjectives. That's leak #4, and it's measurable on your listing today.</p>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>02 / 12</span></div>
+</section>
+
+<!-- 2c · WHAT THE AGENT CAN'T VERIFY -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · The second buyer</span></div>
+  <h2 class="slide-h">What the agent <span class="grad">can't verify.</span></h2>
+  <p class="slide-sub">An agent doesn't trust your support copy or your adjectives. It trusts what it can check — certifications, authority, structured data. Most listings give it nothing.</p>
+  <div class="grid g3">
+    <div class="cell"><div class="ci">// the field</div><h3>92% score zero</h3><p>Across ~600 listings, 92% expose no machine-verifiable trust signal an agent can confirm without a human in the loop.</p></div>
+    <div class="cell"><div class="ci">// the 8%</div><h3>The few that win</h3><p>Under 1 in 12 carry verifiable certs and structured proof. To an agent shortlisting vendors, they're the only credible options on the page.</p></div>
+    <div class="cell"><div class="ci">// the move</div><h3>Become checkable</h3><p>Surface SOC&nbsp;2 / HIPAA / ISO, domain authority, and FAQ schema as data — not prose. It's the cheapest agent-trust win on the board.</p></div>
+  </div>
+  <div class="panel">
+    <div class="lbl">// live, on your listing</div>
+    <h3>"Machine-verifiable trust: ___________________."</h3>
+    <p>We check yours on the air. Present, and you're in the 8% an agent will shortlist. Absent, and you're invisible to it — like everyone else.</p>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>03 / 12</span></div>
+</section>
+
+<!-- 3 · YOUR STAGE -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · Your stage</span></div>
+  <h2 class="slide-h">First, where are you <span class="grad">right now?</span></h2>
+  <p class="slide-sub">The leak that matters depends on your stage. We mark where you actually are today — honestly — because that decides what the next five sessions optimize for.</p>
+  <div class="stages">
+    <div class="stage"><div class="num">00</div><h4>Not listed</h4><p>Pre-listing. The fix is getting on the right way, not patching later.</p></div>
+    <div class="stage on"><div class="mark">←</div><div class="num">01</div><h4>Listed &amp; quiet</h4><p>The listing exists. The pipeline doesn't. Most clients start here.</p></div>
+    <div class="stage"><div class="num">02</div><h4>Some traction</h4><p>Deals trickle in, but you can't name what's driving them.</p></div>
+    <div class="stage"><div class="num">03</div><h4>Scaling</h4><p>It works — now make it repeatable without you in every deal.</p></div>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>04 / 12</span></div>
+</section>
+
+<!-- 4 · 8 DIAGNOSTIC QUESTIONS -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · The diagnostic</span></div>
+  <h2 class="slide-h">Eight questions that <span class="grad">find the leak.</span></h2>
+  <table class="tbl">
+    <tr><th style="width:120px">Lens</th><th>What I'm asking you</th></tr>
+    <tr><td class="tag">Situation</td><td>What's the product, who's the buyer, and what stage is the listing at today?</td></tr>
+    <tr><td class="tag">Situation</td><td>How do buyers find you now — branded search, referral, or not at all?</td></tr>
+    <tr><td class="tag">Problem</td><td>Where in the journey do you watch interest die — before or after they reach the listing?</td></tr>
+    <tr><td class="tag">Problem</td><td>When a deal stalls, what's the reason you hear most: unclear, unpriced, or unsupported?</td></tr>
+    <tr><td class="tag">Impact</td><td>What's a closed deal worth, and how many do you think you're losing to the leak?</td></tr>
+    <tr><td class="tag">Impact</td><td>What does "working" look like in 90 days — a number, not a vibe?</td></tr>
+    <tr><td class="tag">Readiness</td><td>Who owns the keyboard on your listing, pricing, and ACE today?</td></tr>
+    <tr><td class="tag">Readiness</td><td>What have you already tried, and what moved the needle even slightly?</td></tr>
+  </table>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>05 / 12</span></div>
+</section>
+
+<!-- 5 · HYPOTHESIS -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · Hypothesis</span></div>
+  <h2 class="slide-h">My read on your <span class="grad">#1 leak.</span></h2>
+  <p class="slide-sub">From the intake and these answers, I'll commit to a hypothesis on the air — the one stage costing you the most — and we pressure-test it together.</p>
+  <div class="grid g3">
+    <div class="cell"><div class="ci">// the claim</div><h3>One leak, named</h3><p>Not six things to fix. The single highest-leverage stage where your pipeline drains today.</p></div>
+    <div class="cell"><div class="ci">// the evidence</div><h3>Why this one</h3><p>The signals from your listing, pricing, and search footprint that point here over the others.</p></div>
+    <div class="cell"><div class="ci">// the test</div><h3>How we'll know</h3><p>The metric that should move first if the hypothesis is right — your leading indicator.</p></div>
+  </div>
+  <div class="panel">
+    <div class="lbl">// live, on your business</div>
+    <h3>"Your biggest leak is ___________________."</h3>
+    <p>We fill this blank together, out loud, on your real product — and it becomes the spine of the whole engagement.</p>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>06 / 12</span></div>
+</section>
+
+<!-- 6 · COST OF THE LEAK -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · The cost</span></div>
+  <h2 class="slide-h">What the leak is <span class="grad">worth.</span></h2>
+  <p class="slide-sub">We put a number on it. The leak isn't abstract — it's pipeline you're already losing every quarter. This number anchors everything we build next.</p>
+  <div class="statrow">
+    <div class="stat"><div class="num grad">___ /qtr</div><div class="lab">Qualified buyers reaching the leak stage</div></div>
+    <div class="stat"><div class="num grad">___%</div><div class="lab">Dropping out at the leak, vs. benchmark</div></div>
+    <div class="stat"><div class="num grad">$_____</div><div class="lab">Pipeline value walking out the door</div></div>
+  </div>
+  <div class="panel">
+    <div class="lbl">// why we do the math first</div>
+    <h3>The cost of the leak is the budget for fixing it.</h3>
+    <p>When the gap is a number, every session has an ROI target — and you can tell whether the work paid for itself.</p>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>07 / 12</span></div>
+</section>
+
+<!-- 7 · THE SCOREBOARD (LIVE BUILD) -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · Live build · your take-home tracker</span></div>
+  <h2 class="slide-h">The GTM <span class="grad">Scoreboard.</span></h2>
+  <p class="slide-sub">One page you own and keep updating after we're done: leak → fix → metric → status. We start filling it right now.</p>
+  <table class="tbl">
+    <tr><th>Leak</th><th>The fix</th><th>Metric to move</th><th>Owner</th><th>Status</th></tr>
+    <tr class="empty"><td class="lead">Discovery</td><td><span class="blank"></span></td><td>Impressions / search rank</td><td><span class="blank" style="min-width:80px"></span></td><td>Not started</td></tr>
+    <tr class="empty"><td class="lead">Clarity</td><td><span class="blank"></span></td><td>Listing → lead rate</td><td><span class="blank" style="min-width:80px"></span></td><td>Not started</td></tr>
+    <tr class="empty"><td class="lead">Pricing</td><td><span class="blank"></span></td><td>Quote → close rate</td><td><span class="blank" style="min-width:80px"></span></td><td>Not started</td></tr>
+    <tr class="empty"><td class="lead">Agent-ready</td><td><span class="blank"></span></td><td>Parse / match score</td><td><span class="blank" style="min-width:80px"></span></td><td>Not started</td></tr>
+    <tr class="empty"><td class="lead">Demand</td><td><span class="blank"></span></td><td>Traffic to listing</td><td><span class="blank" style="min-width:80px"></span></td><td>Not started</td></tr>
+    <tr class="empty"><td class="lead">Co-sell</td><td><span class="blank"></span></td><td>ACE opps registered</td><td><span class="blank" style="min-width:80px"></span></td><td>Not started</td></tr>
+  </table>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>08 / 12</span></div>
+</section>
+
+<!-- 8 · 6-WEEK PLAN -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · The plan</span></div>
+  <h2 class="slide-h">How the next five sessions <span class="grad">close it.</span></h2>
+  <table class="tbl">
+    <tr><th style="width:90px">Session</th><th>We build</th><th>Lives in your account as</th></tr>
+    <tr><td class="tag">2 · Get found</td><td>Rewrite the listing for humans and agents</td><td class="lead">New title / short / long + keywords in AWS MP</td></tr>
+    <tr><td class="tag">3 · Get bought</td><td>A pricing story that survives procurement</td><td class="lead">3-tier ladder + narrative on your pricing page</td></tr>
+    <tr><td class="tag">4 · Future-proof</td><td>Agent-ready positioning + checklist</td><td class="lead">Machine-legible statement + ordered fixes</td></tr>
+    <tr><td class="tag">5 · Drive demand</td><td>A 4-week campaign that feeds the listing</td><td class="lead">Calendar + hooks + email, scheduled</td></tr>
+    <tr><td class="tag">6 · Multiply</td><td>Co-sell with the AWS field</td><td class="lead">ACE opportunity + outreach, sent</td></tr>
+  </table>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>09 / 12</span></div>
+</section>
+
+<!-- 9 · INSTALL THE OPERATOR -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · Install the operator</span></div>
+  <h2 class="slide-h">Put my brain <span class="grad">in your stack.</span></h2>
+  <p class="slide-sub">Right now, we install the GTM Skill Pack into an AI tool you own — so you run my operator on your own homework between every session, and keep running it after we're done.</p>
+  <div class="grid g2">
+    <div class="cell"><div class="ci">// your tool, your account</div><h3>Claude · GPT · Gemini · Copilot</h3><p>The full six-skill pack dropped into a Claude Project, Custom GPT, Gem, or agent file — owned by you, live from day one.</p></div>
+    <div class="cell"><div class="ci">// what it does</div><h3>Re-run any skill, any time</h3><p>Listing rewrites, pricing stories, agent-readiness, campaigns, co-sell outreach — on demand, in your voice, on your product.</p></div>
+  </div>
+  <div class="panel">
+    <div class="lbl">// the leave-behind</div>
+    <h3>Every output carries one footer: "Want this run for you? Book a call."</h3>
+    <p>You keep the operator. When you want depth or volume, the next step routes back to me.</p>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>10 / 12</span></div>
+</section>
+
+<!-- 10 · HOMEWORK -->
+<section class="slide">
+  <div class="kicker"><span class="dot"></span><span class="sn">Session 1 · Homework</span></div>
+  <h2 class="slide-h">Before session 2: <span class="grad">gather the inputs.</span></h2>
+  <p class="slide-sub">Session 2 is the listing rewrite — and it starts hot only if these are in hand. Twenty minutes of prep now buys a full working session of build.</p>
+  <div class="hw">
+    <div class="item"><span class="ck"></span><span class="tx">Your live AWS Marketplace listing URL <span>— exactly as a buyer sees it today.</span></span></div>
+    <div class="item"><span class="ck"></span><span class="tx">Current pricing — dimensions, units, and anything behind "contact us." <span>— for session 3.</span></span></div>
+    <div class="item"><span class="ck"></span><span class="tx">Your ICP in one paragraph — who buys, the job they're hiring you for. <span>— who we're writing to.</span></span></div>
+    <div class="item"><span class="ck"></span><span class="tx">Confirm the Skill Pack is installed and you've run it once. <span>— your operator is live.</span></span></div>
+  </div>
+  <div class="foot"><span class="promise">From listed to bought.</span><span>itsrondavis.com</span><span>11 / 12</span></div>
+</section>
+
+</body>
+</html>

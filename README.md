@@ -1,7 +1,7 @@
 # The AWS Marketplace GTM Skill Pack
 
 **Your AWS Marketplace go-to-market team — as an AI skill pack.**
-Eight years of Marketplace GTM, distilled into six skills you drop straight into the model you already use. From listed to bought.
+Eight years of Marketplace GTM, distilled into seven skills you drop straight into the model you already use. From listed to bought.
 
 By [Ron Davis](https://itsrondavis.com) · Free to use.
 
@@ -9,16 +9,18 @@ By [Ron Davis](https://itsrondavis.com) · Free to use.
 
 ## What's in it
 
-Six skills — each a self-contained, model-agnostic prompt:
+Eight skills — each a self-contained, model-agnostic prompt. **Start with The Second Buyer Audit** — it scores your listing for both buyers and points you to the fix you need:
 
 | Skill | What it does |
 |---|---|
+| **The Second Buyer Audit** ★ | Score your listing twice — human read vs the AI agent that procures — and see the delta. The diagnostic; run it first. |
 | **Listing Optimizer** | Rewrite your Marketplace listing for human discovery *and* machine/agent consumption. |
 | **Co-sell Outreach Writer** | ACE-ready outreach to AWS reps + a paste-ready ACE opportunity summary. |
 | **Pricing Story Builder** | Package and price data/AI products — including for agentic buyers. |
 | **Demand-Gen Campaign Kit** | Post-launch content + campaign sequences that actually generate demand. |
 | **Agent-Ready Positioning** | Make your product discoverable and buyable when the buyer is an AI agent. |
 | **Discovery Call Prep** | Walk into a partner GTM call with the right diagnostic questions. |
+| **AWS Startups Offer Builder** | Decide if a product fits the AWS Startups Offers co-sell layer — and write the offer card if it does. |
 
 Each lives in [`skills/<name>/SKILL.md`](skills/) (Claude Agent Skill format). The whole set as one paste-in file is [`pack/gtm-skill-pack.md`](pack/gtm-skill-pack.md).
 
