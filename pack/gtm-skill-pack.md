@@ -1,6 +1,6 @@
 # Ron Davis — AWS Marketplace GTM Skill Pack
 
-> Eight skills · From listed to bought. · itsrondavis.com
+> Ten skills · From listed to bought. · itsrondavis.com
 >
 > Drop this whole file into your model (Claude Project knowledge, a ChatGPT Custom GPT, a Gemini Gem, or a Copilot agent). Then ask for a skill by name, e.g. "Run the Listing Optimizer on our listing."
 
@@ -218,6 +218,30 @@ PASS only if 1–2 pass and 3–5 have a plan. If any of 3–5 fail, output the 
 **Caption generator (run per image):** three options — **good** (what it shows) / **better** (what + why it matters here) / **best** (+ a number or takeaway the reader remembers) — plus WCAG 2.1 alt; decorative images get `alt=""`.
 
 **Output format.** Return: (1) a pass/fail on each bar item, (2) the fixed, publish-ready post, (3) the server-rendered JSON-LD block, (4) any caption/alt sets generated. This review is the last step before staging.
+
+---
+
+## 10. Listing–Website Parity Generator
+
+**Role.** Make a seller's external web presence machine-legible to the *same AI agent that reads their AWS Marketplace listing*. The agent corroborates a listing's claims against the seller's website; JSON-LD is how that corroboration happens machine-readably. **AWS Marketplace pages carry no structured data** — so the seller's own site is the only place this signal can live, and most sellers ship none. That's the ownable edge. *(Free do-it-yourself half; the paid Vellocity "Listing ↔ Website Parity Score" crawls the live listing + web graph, scores parity, and monitors drift.)*
+
+**Ask the user for these inputs first:**
+- The listing — public URL, or pasted title + short + long description + highlights
+- The web property(ies) you control where this lives — apex, `/security` or `/trust`, docs, a campaign LP (note durable vs. campaign)
+- **Software vendor, or reseller / channel partner?** A seller of record who doesn't own the product site can't add JSON-LD to it — flag it.
+- Real, verifiable claims to mirror: certs (SOC 2 / ISO 27001 / HIPAA / FedRAMP), quantified outcomes, regions, integrations, pricing/free-trial
+- Third-party trust profiles: G2, Drata/Vanta trust page, Gartner Peer Insights, LinkedIn (for `sameAs`)
+
+**Method:**
+1. **Pick the root schema** by product type: software → `SoftwareApplication`; professional services → `Service`; data → `Dataset`/`Product`.
+2. **Mirror only real listing claims** — title/desc → `name`/`description` (the listing's actual wording, parity not paraphrase); category → `applicationCategory`/`serviceType`; pricing → `offers` (`Offer` + `eligibleRegion`); certs → `hasCertification`; quantified outcomes → concrete numbers in `description`; use-cases/FAQ → a `FAQPage` block.
+3. **Emit `Organization` with `sameAs`** → [G2, Drata/Vanta, LinkedIn] — this makes third-party trust presence machine-readable, the tier AWS's agent weights most.
+4. **Place it on a durable, structural page** (apex, `/security`, `/trust`, docs), not only a campaign LP; for industry-variant listings, each industry's terms must appear on a matching page or the parity gap stays open.
+5. **Validate** in Google's Rich Results Test before publishing.
+
+**Guardrails:** mirror, never invent (false markup fails corroboration *and* is dishonest); a cert named as a service's *subject* ("SOC 2 Kickstart") is NOT a credential the seller holds — never emit `hasCertification` for it; owned properties only (no website = stop, that's the prerequisite; resellers flag the publisher coordination gap); match wording; durable beats ephemeral.
+
+**Output format.** Return: (1) one paste-ready `<script type="application/ld+json">` block (root + `offers` + `Organization`/`sameAs`), (2) a `FAQPage` block if applicable, (3) a placement note (durable-first), (4) a gap list of any claim you couldn't mirror because it wasn't verifiable, (5) the validation link.
 
 ---
 

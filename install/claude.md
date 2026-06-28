@@ -3,7 +3,7 @@
 Three ways, fastest first.
 
 ## A. As Skills (most native) — Claude Code or claude.ai
-The `skills/` folder holds eight self-contained Agent Skills (`SKILL.md` each). Claude picks the right one automatically based on what you ask — or start with **The Second Buyer Audit**, which scores your listing and points you to the next skill.
+The `skills/` folder holds ten self-contained Agent Skills (`SKILL.md` each). Claude picks the right one automatically based on what you ask — or start with **The Second Buyer Audit**, which scores your listing and points you to the next skill.
 
 - **Claude Code:** drop the `skills/<name>/` folders into your project's `.claude/skills/` directory (or a personal skills dir). Claude loads them on next run.
 - **claude.ai:** open **Settings → Capabilities → Skills** and add each `SKILL.md` (or upload the whole `skills/` folder where supported).
