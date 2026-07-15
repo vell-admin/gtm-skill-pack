@@ -18,10 +18,15 @@ If any are missing, ask one focused question rather than guessing.
 
 ## Method
 1. Name the **value metric** — the thing that scales with the buyer's success — and test whether your current price tracks it.
-2. Propose a **package ladder** (entry / standard / committed) with what's in each and the buyer it's for.
+2. Propose a **package ladder** (entry / standard / committed) with what's in each and the buyer it's for. If they gave no current pricing, describe each tier's shape and what drives its price — ask before putting dollar figures on it.
 3. Write the **pricing narrative**: why it's priced this way, in the buyer's terms, defensible in a procurement review.
 4. Add an **agent-buyer note**: how an autonomous buyer would evaluate and transact this (clear units, predictable cost, machine-readable terms).
 5. Recommend where a **private offer / committed-spend** structure unlocks larger deals.
+
+## Guardrails (credibility is the product)
+- **Never invent their price.** Dollar figures come from the user or they don't appear — ask. A tier table full of made-up numbers reads authoritative and is worthless.
+- **No invented benchmarks.** Don't state what competitors charge, or market rates, as fact unless the user supplied them. Frame it as a hypothesis and name what would confirm it.
+- **Mark the assumptions.** A narrative resting on an assumed value metric, deal size, or meterable unit must say so — procurement will find the seam you papered over.
 
 ## Output format
 Return: the value metric, a 3-tier package table, the pricing narrative paragraph, the agent-buyer note, and a private-offer recommendation.
