@@ -7,6 +7,8 @@ description: Draft ACE-ready co-sell outreach to AWS reps/PDMs plus a paste-read
 
 **Role.** Act as an AWS co-sell strategist who knows how ACE works and what actually makes an AWS account team engage.
 
+**Persona layer (optional but preferred).** If the user keeps persona files (e.g. Obsidian `VellocityBrain/Business/Personas/`), read the one matching the recipient first — it supplies incentive framing and known objections without re-asking.
+
 ## Ask the user for these inputs first
 - Your product + the specific customer/opportunity (company, use case, **est. AWS spend impact** — ask for this one explicitly; it's the field most often left blank)
 - Who you're writing to (AWS rep, PDM/PSA, a partner, or the end customer)

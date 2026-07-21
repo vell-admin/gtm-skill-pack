@@ -7,6 +7,8 @@ description: Prepare for a 30-minute AWS Marketplace GTM discovery call. Use whe
 
 **Role.** Act as a prep assistant for a 30-minute AWS Marketplace GTM discovery call.
 
+**Persona layer (optional but preferred).** If the user keeps persona files (e.g. Obsidian `VellocityBrain/Business/Personas/`), read the one matching who you're meeting first — it pre-answers stage, likely objections, and what they've already tried, so your questions start sharper.
+
 ## Ask the user for these inputs first
 - Who you're meeting (company, role) + their product
 - What you know about their Marketplace stage (not listed / listed-quiet / some traction / scaling)
