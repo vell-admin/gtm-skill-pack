@@ -1,3 +1,10 @@
 .DS_Store
 node_modules/
 *.log
+
+# ── Never publish: this repo is PUBLIC (github.com/vell-admin/gtm-skill-pack) ──
+# The content engine is Ron's private writing system — voice.md (voice mechanics
+# and the pre-publish checklist), platform-playbook.md, hooks.md, creator-profile.md.
+# It lives here only so the skills can reference it locally. It has never been
+# pushed, and must not be: a bare `git add .` would publish it in one command.
+skills/content-engine/
