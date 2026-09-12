@@ -43,7 +43,7 @@ Each lives in [`skills/<name>/SKILL.md`](skills/) (Claude Agent Skill format). T
 
 1. **Markdown / Skills** *(this repo)* — paste a file, or install the Claude Skills. Zero setup.
 2. **Public repo** *(you're here)* — clone or copy; version-controlled, always current.
-3. **Live tools (MCP)** *(Foundry)* — the skills as a remote **MCP server** you add as one connector URL, so your model runs them as tools instead of reading instructions. This is the paid tier — see [docs/MCP-SERVER-SCOPE.md](docs/MCP-SERVER-SCOPE.md).
+3. **Live tools (MCP)** *(Foundry)* — the skills as a remote **MCP server** you add as one connector URL, so your model runs them as tools instead of reading instructions. Planned as the paid tier — **not live yet** (the gateway is not serving as of Sept 2026); scope in [docs/MCP-SERVER-SCOPE.md](docs/MCP-SERVER-SCOPE.md).
 4. **The platform — [Vellocity](https://vell.ai)** — the real engine. This pack teaches the *method*; Vellocity *runs* it end-to-end at scale, with live Marketplace data, automation, and the agent layer these tools only preview.
 
 > **The ladder:** free = the knowledge (these skills) → Foundry = the tools that run them → **Vellocity = the platform that does it for you.** Charging for capability, not content, is the whole agentic-commerce thesis — get found, chosen, and paid when the buyer is an agent. This pack is a working teaser of that engine.

@@ -1,6 +1,6 @@
 # GTM Skill Pack — MCP Server Scope (Foundry "tools" tier)
 
-**Status:** the free sample tier is **built** → [github.com/vell-io/vellocity-mcp](https://github.com/vell-io/vellocity-mcp). This doc scopes the full tiered plan.
+**Status (2026-09-11):** the gateway at `mcp.vell.ai` is **not currently serving** — nothing on this page is live for buyers yet. The free sample tier is **built** → [github.com/vell-io/vellocity-mcp](https://github.com/vell-io/vellocity-mcp). This doc scopes the full tiered plan.
 **It's not a standalone tool — it's the free `gtm_*` sample tier of the one [Vellocity MCP](https://github.com/vell-io/vellocity-mcp)** (gateway: **`mcp.vell.ai`**), with authenticated (live-data) and metered tiers gated above it. See that repo's `docs/ARCHITECTURE.md` for tiers, repo strategy, and the security model.
 **Why:** the free tier ships the *knowledge* (the ten skills as markdown). The paid tier ships the *capability* — the same skills as **live tools** your model runs, via one remote MCP connector URL. Charge for capability/access, not static content. That is the agentic-commerce thesis, dog-fooded.
 
