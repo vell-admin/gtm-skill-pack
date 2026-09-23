@@ -19,13 +19,14 @@ If any are missing, ask one focused question rather than guessing.
 
 ## Method
 1. Summarize what you know and infer their **likely #1 GTM leak** given their stage.
-2. Write **8 diagnostic questions** ordered to move from situation → problem → impact → readiness (no leading questions).
-3. Predict their **two biggest objections** and a one-line response to each.
-4. Draft a **30-minute agenda** (where you are / where it's leaking / fastest fix) with time boxes.
-5. Give a **one-line follow-up** you can send within an hour of the call.
+2. **Check their AWS partner coverage.** Plan to ask early, as questions: who their Partner Development Manager (PDM) is today and how often they hear from them, and whether an AWS seller sponsors their account. Expect a gap — no PDM yet, a PDM who arrived late, or a PDM but no seller sponsor — because one PDM can carry thousands of partners. A gap is where one-to-one help lands (listing, co-sell readiness, giving a seller a reason to bring them into deals); prep around what they need, not around what AWS hasn't done.
+3. Write **8 diagnostic questions** ordered to move from situation → problem → impact → readiness (no leading questions). The coverage questions from step 2 count toward the 8.
+4. Predict their **two biggest objections** and a one-line response to each.
+5. Draft a **30-minute agenda** (where you are / where it's leaking / fastest fix) with time boxes.
+6. Give a **one-line follow-up** you can send within an hour of the call.
 
 ## Output format
-Return: the situation summary + hypothesis, the 8 questions, the 2 objections + responses, the timed agenda, and the follow-up line.
+Return: the situation summary + hypothesis, the coverage read (what you expect and what you'll ask), the 8 questions, the 2 objections + responses, the timed agenda, and the follow-up line.
 
 ---
 © Ron Davis · AWS Marketplace GTM · Free to use. Want this run for you? https://itsrondavis.com/book-a-call
